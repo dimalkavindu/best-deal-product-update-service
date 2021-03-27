@@ -1,0 +1,12 @@
+base-url:
+  context: /PubSubManager
+
+log:
+  identifierKey: UUID
+
+spring:
+  cloud:
+    gcp:
+      pub:
+        topicName: testTopic
+      project-id: best-deal-pubsubservice
