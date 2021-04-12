@@ -6,6 +6,8 @@ import com.domain.entities.dto.DomainResponseEntity;
 import com.external.exception.WebClientException;
 import com.google.api.core.ApiFuture;
 import com.google.cloud.pubsub.v1.Publisher;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.protobuf.ByteString;
 import com.google.pubsub.v1.PubsubMessage;
 import com.google.pubsub.v1.TopicName;
@@ -31,7 +33,9 @@ public class PublishWithCustomAttributesService implements MessageHandlerInterfa
 
     String messageId = null;
 
-    public DomainResponseEntity publish(DomainRequestEntity domainRequestEntity)
+    Gson gson = new GsonBuilder().create();
+
+    public void publish(DomainRequestEntity domainRequestEntity)
             throws Exception {
         TopicName topicName = TopicName.of(projectId, this.topicName);
         Publisher publisher = null;
@@ -41,10 +45,14 @@ public class PublishWithCustomAttributesService implements MessageHandlerInterfa
             // Create a publisher instance with default settings bound to the topic
             publisher = Publisher.newBuilder(topicName).build();
 
+            log.info("domainRequestEntity: " + domainRequestEntity.toString() );
+
             PubsubMessage pubsubMessage =
                     PubsubMessage.newBuilder()
-                            .setData(ByteString.copyFromUtf8(domainRequestEntity.toString()))
+                            .setData(ByteString.copyFromUtf8(gson.toJson(domainRequestEntity)))
                             .build();
+
+            log.info("Message to be published: " + pubsubMessage.toString() );
 
             // Once published, returns a server-assigned message id (unique within the topic)
             ApiFuture<String> messageIdFuture = publisher.publish(pubsubMessage);
@@ -56,21 +64,15 @@ public class PublishWithCustomAttributesService implements MessageHandlerInterfa
             }
 
         } finally {
-            if (publisher != null) {
-                // When finished with the publisher, shutdown to free up resources.
-                log.info("Publisher shout down started");
-                publisher.shutdown();
-                log.info("Publisher shout down done");
-                //publisher.awaitTermination(1, TimeUnit.MINUTES);
-                publisher.awaitTermination(1, TimeUnit.SECONDS);
-                log.info("Publisher awaitTermination done");
-            }
+//            if (publisher != null) {
+//                // When finished with the publisher, shutdown to free up resources.
+//                log.info("Publisher shout down started");
+//                publisher.shutdown();
+//                log.info("Publisher shout down done");
+//                //publisher.awaitTermination(1, TimeUnit.MINUTES);
+//                publisher.awaitTermination(1, TimeUnit.SECONDS);
+//                log.info("Publisher awaitTermination done");
+//            }
         }
-
-        domainResponseEntity.setResCode("200");
-        domainResponseEntity.setResDesc("Operation Success");
-        domainResponseEntity.setMessageId(messageId);
-
-        return domainResponseEntity;
     }
 }

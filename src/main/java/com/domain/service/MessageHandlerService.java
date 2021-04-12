@@ -12,7 +12,7 @@ public class MessageHandlerService {
     @Autowired
     MessageHandlerInterface messageHandlerInterface;
 
-    public DomainResponseEntity publishMessage(DomainRequestEntity domainRequestEntity) throws Exception {
-        return messageHandlerInterface.publish(domainRequestEntity);
+    public void publishMessage(DomainRequestEntity domainRequestEntity) throws Exception {
+        messageHandlerInterface.publish(domainRequestEntity);
     }
 }

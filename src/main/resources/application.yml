@@ -1,5 +1,5 @@
 base-url:
-  context: /PubSubManager
+  context: /best-deal/catalog-update/v1
 
 log:
   identifierKey: UUID
@@ -8,5 +8,5 @@ spring:
   cloud:
     gcp:
       pub:
-        topicName: testTopic
-      project-id: best-deal-pubsubservice
+        topicName: productInputs
+      project-id: productcatelog

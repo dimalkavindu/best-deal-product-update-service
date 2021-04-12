@@ -8,5 +8,5 @@ import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 public interface MessageHandlerInterface {
-    public DomainResponseEntity publish(DomainRequestEntity domainRequestEntity) throws Exception;
+    public void publish(DomainRequestEntity domainRequestEntity) throws Exception;
 }

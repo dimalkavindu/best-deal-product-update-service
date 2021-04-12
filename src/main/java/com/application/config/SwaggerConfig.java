@@ -27,7 +27,7 @@ public class SwaggerConfig {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .select().apis(RequestHandlerSelectors.basePackage("com.com.application.controller"))
+                .select().apis(RequestHandlerSelectors.basePackage("com.application.controller"))
                 .paths(regex("/.*"))
                 .build()
                 .apiInfo(apiInfo()).pathProvider(new BasePathAwareRelativePathProvider(context));
